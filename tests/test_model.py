@@ -67,3 +67,7 @@ def test_rejects_empty_and_wrong_shape():
 def test_warns_on_late_month_start():
     cal = parse({"tasks": [{"name": "Rent", "every": "monthly", "start": "2026-01-31"}]})
     assert cal.warnings
+    cal = parse({"tasks": [{"name": "Tags", "every": "yearly", "start": "2027-06-30"}]})
+    assert not cal.warnings
+    cal = parse({"tasks": [{"name": "Leap", "every": "yearly", "start": "2028-02-29"}]})
+    assert cal.warnings

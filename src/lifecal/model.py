@@ -180,11 +180,13 @@ def parse(data: Any, source: str = "life.yml") -> Calendar:
             if until and until < start:
                 problems.append(f"{label}: 'until' is before 'start'")
                 continue
-            if every.unit in ("month", "year") and start.day > 28:
+            if every.unit == "month" and start.day > 28:
                 warnings.append(
                     f"{label}: starts on day {start.day}; some calendar apps skip months "
                     "without that day. Day 28 or earlier is safest."
                 )
+            elif every.unit == "year" and (start.month, start.day) == (2, 29):
+                warnings.append(f"{label}: starts on Feb 29, so it only appears in leap years")
             tasks.append(Task(name, start, every, until, remind, notes))
         except ValueError as exc:
             problems.append(f"{label}: {exc}")
