@@ -1,0 +1,18 @@
+# lifecal task file. Edit the dates, then run: lifecal build life.yml
+# Docs: https://github.com/nicoleyangcoding/life-maintenance-calendar
+
+calendar:
+  name: Life maintenance
+  remind: 1 week before        # default for every task; override per task
+
+tasks:
+  # Repeating task: needs 'every' and a 'start' date.
+  - name: Test smoke and CO alarms
+    every: 6 months
+    start: 2026-11-01
+
+  # One-off date: just 'due'.
+  - name: Passport expires
+    due: 2030-05-01
+    remind: 9 months before
+    notes: Many countries require 6 months of validity to enter.

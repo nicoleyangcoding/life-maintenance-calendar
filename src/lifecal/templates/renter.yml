@@ -1,0 +1,20 @@
+# Renter template.
+
+calendar:
+  name: Apartment
+  remind: 1 week before
+
+tasks:
+  - name: Test smoke alarm
+    every: 6 months
+    start: 2026-11-01
+  - name: Clean range hood filter
+    every: 3 months
+    start: 2026-12-01
+  - name: Review renters insurance
+    every: 1 year
+    start: 2027-06-01
+  - name: Lease renewal decision
+    due: 2027-07-01
+    remind: 2 months before
+    notes: Check your lease for the notice period.

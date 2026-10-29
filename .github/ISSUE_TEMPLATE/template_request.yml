@@ -1,0 +1,11 @@
+name: Template or feature idea
+description: Suggest a new template or an improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like?
+      description: For a template, list the tasks and how often each one happens.
+    validations:
+      required: true

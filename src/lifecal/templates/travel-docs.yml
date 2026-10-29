@@ -1,0 +1,20 @@
+# Travel documents. Replace the example dates with yours.
+
+calendar:
+  name: Documents
+  remind: 3 months before
+
+tasks:
+  - name: Passport expires
+    due: 2030-05-01
+    remind: 9 months before
+    notes: Many countries require 6 months of validity to enter.
+  - name: Driver's license expires
+    due: 2029-08-15
+  - name: Trusted traveler membership expires
+    due: 2028-02-01
+    remind: 6 months before
+  - name: Travel insurance renews
+    every: 1 year
+    start: 2027-01-01
+    remind: 1 month before

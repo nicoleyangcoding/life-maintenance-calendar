@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "life-maintenance-calendar"
+version = "0.1.0"
+description = "Turn a plain-text list of life and home chores into a calendar you can subscribe to."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Nicole Yang" }]
+requires-python = ">=3.9"
+dependencies = ["PyYAML>=6.0"]
+keywords = ["calendar", "ics", "icalendar", "home maintenance", "reminders", "yaml"]
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Office/Business :: Scheduling",
+]
+
+[project.urls]
+Homepage = "https://github.com/nicoleyangcoding/life-maintenance-calendar"
+Issues = "https://github.com/nicoleyangcoding/life-maintenance-calendar/issues"
+Changelog = "https://github.com/nicoleyangcoding/life-maintenance-calendar/blob/main/CHANGELOG.md"
+
+[project.scripts]
+lifecal = "lifecal.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lifecal"]
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -1,0 +1,27 @@
+# Car owner template. Intervals vary by vehicle; check your owner's manual.
+
+calendar:
+  name: Car
+  remind: 2 weeks before
+
+tasks:
+  - name: Oil change
+    every: 6 months
+    start: 2027-01-15
+  - name: Rotate tires
+    every: 6 months
+    start: 2027-01-15
+  - name: Replace wiper blades
+    every: 1 year
+    start: 2027-10-01
+  - name: Replace cabin air filter
+    every: 1 year
+    start: 2027-04-01
+  - name: Renew registration
+    every: 1 year
+    start: 2027-06-30
+    remind: 1 month before
+  - name: Renew car insurance
+    every: 1 year
+    start: 2027-03-01
+    remind: 1 month before

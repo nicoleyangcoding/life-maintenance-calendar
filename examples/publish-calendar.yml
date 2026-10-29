@@ -1,0 +1,40 @@
+# Copy this file to .github/workflows/publish-calendar.yml in the repo that holds your life.yml.
+# Then turn on GitHub Pages: Settings > Pages > Source: GitHub Actions.
+# Your calendar URL will be https://<your-username>.github.io/<repo>/life.ics
+#
+# Anyone with that URL can read the calendar. Keep personal details out of it.
+
+name: Publish calendar
+
+on:
+  push:
+    branches: [main]
+    paths: [life.yml]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: nicoleyangcoding/life-maintenance-calendar@v0
+        with:
+          file: life.yml
+          output: public/life.ics
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploy
+        uses: actions/deploy-pages@v4

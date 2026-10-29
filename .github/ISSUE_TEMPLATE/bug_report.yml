@@ -1,0 +1,22 @@
+name: Bug report
+description: Something isn't working as expected.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: Include the command you ran and the output.
+    validations:
+      required: true
+  - type: textarea
+    id: file
+    attributes:
+      label: Task file (optional)
+      description: The smallest part of your life.yml that shows the problem. Remove anything personal.
+      render: yaml
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Output of `lifecal --version`

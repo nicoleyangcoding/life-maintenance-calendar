@@ -1,0 +1,38 @@
+# Homeowner template. Change the start dates to when you last did each job.
+
+calendar:
+  name: Home maintenance
+  remind: 1 week before
+
+tasks:
+  - name: Replace HVAC air filter
+    every: 3 months
+    start: 2026-11-01
+  - name: Test smoke and CO alarms
+    every: 6 months
+    start: 2026-11-01
+  - name: Replace smoke alarm batteries
+    every: 1 year
+    start: 2026-11-01
+  - name: Clean dryer vent
+    every: 1 year
+    start: 2027-01-15
+  - name: Flush water heater
+    every: 1 year
+    start: 2027-03-01
+  - name: Clean gutters
+    every: 6 months
+    start: 2027-04-15
+  - name: Service furnace or heat pump
+    every: 1 year
+    start: 2027-09-15
+  - name: Clean refrigerator coils
+    every: 1 year
+    start: 2027-02-01
+  - name: Check fire extinguisher pressure
+    every: 1 year
+    start: 2027-01-01
+  - name: Replace smoke alarms
+    every: 10 years
+    start: 2034-11-01
+    notes: Most smoke alarms are rated for about 10 years. Check the date on the back.

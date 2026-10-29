@@ -1,0 +1,22 @@
+# Pet owner template. Your vet sets the real schedule.
+
+calendar:
+  name: Pets
+  remind: 1 week before
+
+tasks:
+  - name: Flea and tick treatment
+    every: 1 month
+    start: 2026-11-05
+    remind: same day
+  - name: Heartworm prevention
+    every: 1 month
+    start: 2026-11-05
+    remind: same day
+  - name: Annual vet checkup
+    every: 1 year
+    start: 2027-03-10
+    remind: 3 weeks before
+  - name: Renew pet license
+    every: 1 year
+    start: 2027-01-31
