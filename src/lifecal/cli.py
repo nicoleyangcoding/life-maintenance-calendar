@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import json
 import sys
 from importlib import resources
 from pathlib import Path
@@ -60,6 +61,19 @@ def cmd_upcoming(args: argparse.Namespace) -> int:
     cal = _load(args.file)
     today = dt.date.today()
     rows = schedule.upcoming(cal.tasks, today, args.days)
+    if args.format == "json":
+        items = [
+            {
+                "date": day.isoformat(),
+                "days_left": (day - today).days,
+                "task": task.name,
+                "every": str(task.every) if task.every else None,
+                "notes": task.notes,
+            }
+            for day, task in rows
+        ]
+        print(json.dumps(items, indent=2))
+        return 0
     if not rows:
         print(f"Nothing due in the next {args.days} days.")
         return 0
@@ -100,6 +114,7 @@ def build_parser() -> argparse.ArgumentParser:
     p = sub.add_parser("upcoming", help="list what is due soon")
     p.add_argument("file", nargs="?", default=DEFAULT_FILE)
     p.add_argument("--days", type=int, default=90, help="how far ahead to look (default: 90)")
+    p.add_argument("--format", choices=("text", "json"), default="text", help="output format (default: text)")
     p.set_defaults(func=cmd_upcoming)
 
     p = sub.add_parser("check", help="validate a task file")

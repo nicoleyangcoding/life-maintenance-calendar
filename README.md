@@ -73,12 +73,13 @@ Templates are general starting points, not professional advice. Where your manuf
 
 ## Commands
 
-| Command                       | What it does                                    |
-| ----------------------------- | ----------------------------------------------- |
-| `lifecal init [template]`     | Create `life.yml` from a template               |
-| `lifecal build [file]`        | Write the `.ics` calendar file                  |
-| `lifecal upcoming [--days N]` | List what's due in the next N days (default 90) |
-| `lifecal check [file]`        | Validate the file and explain any problems      |
+| Command                          | What it does                                      |
+| -------------------------------- | ------------------------------------------------- |
+| `lifecal init [template]`        | Create `life.yml` from a template                 |
+| `lifecal build [file]`           | Write the `.ics` calendar file                    |
+| `lifecal upcoming [--days N]`    | List what's due in the next N days (default 90)   |
+| `lifecal upcoming --format json` | The same list as JSON, for scripts and dashboards |
+| `lifecal check [file]`           | Validate the file and explain any problems        |
 
 Every command reads `life.yml` in the current folder unless you pass another file.
 

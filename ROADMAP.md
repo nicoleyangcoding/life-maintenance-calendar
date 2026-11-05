@@ -4,7 +4,7 @@ Small, focused releases. Ideas and votes are welcome in [issues](https://github.
 
 ## 0.2
 - [ ] `lifecal done "<task>"`: log when you last did a task and move its next date forward
-- [ ] `--format json` for `upcoming`, for scripts and dashboards
+- [x] `--format json` for `upcoming`, for scripts and dashboards
 - [ ] Template: `new-baby` (pediatric visit reminders, car seat expiry)
 
 ## 0.3

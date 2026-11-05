@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from lifecal.cli import main, template_names
@@ -29,3 +30,33 @@ def test_bad_file_reports_problems(tmp_path: Path, capsys):
     bad.write_text("tasks:\n  - name: Oops\n")
     assert main(["check", str(bad)]) == 1
     assert "give either 'every'" in capsys.readouterr().err
+
+
+def test_upcoming_json(tmp_path: Path, capsys):
+    life = tmp_path / "life.yml"
+    life.write_text(
+        "tasks:\n"
+        "  - name: Replace air filter\n"
+        "    every: quarterly\n"
+        "    start: 2020-01-01\n"
+        "    notes: 16x25x1\n"
+        "  - name: Renew passport\n"
+        "    due: 2099-01-01\n"
+    )
+    assert main(["upcoming", str(life), "--days", "120", "--format", "json"]) == 0
+    items = json.loads(capsys.readouterr().out)
+    assert items
+    first = items[0]
+    assert set(first) == {"date", "days_left", "task", "every", "notes"}
+    assert first["task"] == "Replace air filter"
+    assert first["every"] == "3 months"
+    assert first["notes"] == "16x25x1"
+    assert 0 <= first["days_left"] <= 120
+    assert all(item["task"] != "Renew passport" for item in items)
+
+
+def test_upcoming_json_empty(tmp_path: Path, capsys):
+    life = tmp_path / "life.yml"
+    life.write_text("tasks:\n  - name: Renew passport\n    due: 2099-01-01\n")
+    assert main(["upcoming", str(life), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out) == []
