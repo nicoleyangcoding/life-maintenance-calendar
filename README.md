@@ -54,7 +54,7 @@ tasks:
 | `remind` | `3 days before`, `2 weeks before`, `same day`, or `none`. Default: 1 week. |
 | `notes`  | Optional details shown in the event.                                       |
 
-Each task uses either `every` + `start`, or `due`. If something is off, `lifecal check` tells you exactly what to fix.
+Each task uses either `every` + `start`, or `due`. If something is off, `lifecal check` tells you exactly what to fix. It also warns about one-off tasks whose `due` date has already passed, so a renewal you forgot to update doesn't quietly drop off your calendar.
 
 ## Templates
 

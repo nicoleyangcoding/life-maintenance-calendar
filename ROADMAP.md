@@ -9,7 +9,7 @@ Small, focused releases. Ideas and votes are welcome in [issues](https://github.
 
 ## 0.3
 - [ ] `lifecal add`: add a task interactively, without editing YAML
-- [ ] Warn about tasks whose `due` date has already passed
+- [x] Warn about tasks whose `due` date has already passed
 - [ ] Templates: `bike`, `garden`, `small-business` (license and filing renewals)
 
 ## Later

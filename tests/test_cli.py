@@ -60,3 +60,10 @@ def test_upcoming_json_empty(tmp_path: Path, capsys):
     life.write_text("tasks:\n  - name: Renew passport\n    due: 2099-01-01\n")
     assert main(["upcoming", str(life), "--format", "json"]) == 0
     assert json.loads(capsys.readouterr().out) == []
+
+
+def test_check_warns_about_past_due_dates(tmp_path: Path, capsys):
+    life = tmp_path / "life.yml"
+    life.write_text("tasks:\n  - name: Old filing\n    due: 2001-04-15\n")
+    assert main(["check", str(life)]) == 0
+    assert "warning: task 1 (Old filing): due 2001-04-15 has already passed" in capsys.readouterr().err

@@ -71,3 +71,12 @@ def test_warns_on_late_month_start():
     assert not cal.warnings
     cal = parse({"tasks": [{"name": "Leap", "every": "yearly", "start": "2028-02-29"}]})
     assert cal.warnings
+
+
+def test_warns_when_due_date_has_passed():
+    data = {"tasks": [{"name": "Renew passport", "due": "2026-03-01"}]}
+    cal = parse(data, today=dt.date(2026, 3, 2))
+    assert len(cal.warnings) == 1
+    assert "Renew passport" in cal.warnings[0] and "2026-03-01 has already passed" in cal.warnings[0]
+    assert cal.tasks  # still loads, so the calendar keeps building
+    assert not parse(data, today=dt.date(2026, 3, 1)).warnings

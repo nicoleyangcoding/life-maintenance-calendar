@@ -113,7 +113,7 @@ def load(path: str | Path) -> Calendar:
     return parse(data, source=str(path))
 
 
-def parse(data: Any, source: str = "life.yml") -> Calendar:
+def parse(data: Any, source: str = "life.yml", today: dt.date | None = None) -> Calendar:
     if not isinstance(data, dict):
         raise ConfigError([f"{source}: expected a 'tasks:' list at the top level"])
 
@@ -123,6 +123,7 @@ def parse(data: Any, source: str = "life.yml") -> Calendar:
 
     problems: list[str] = []
     warnings: list[str] = []
+    today = today or dt.date.today()
 
     default_remind: int | None = DEFAULT_REMIND_DAYS
     if "remind" in settings:
@@ -168,7 +169,13 @@ def parse(data: Any, source: str = "life.yml") -> Calendar:
                 if "start" in raw or "until" in raw:
                     problems.append(f"{label}: 'start' and 'until' only apply to repeating tasks")
                     continue
-                tasks.append(Task(name, parse_date(raw["due"]), remind_days=remind, notes=notes))
+                due = parse_date(raw["due"])
+                if due < today:
+                    warnings.append(
+                        f"{label}: due {due.isoformat()} has already passed. "
+                        "Set a new date, or remove the task if it's done."
+                    )
+                tasks.append(Task(name, due, remind_days=remind, notes=notes))
                 continue
 
             if "start" not in raw:
