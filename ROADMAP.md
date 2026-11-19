@@ -13,7 +13,7 @@ Small, focused releases. Ideas and votes are welcome in [issues](https://github.
 - [ ] Templates: `bike`, `garden`, `small-business` (license and filing renewals)
 
 ## Later
-- [ ] Combine several task files into one calendar (`lifecal build home.yml car.yml`)
+- [x] Combine several task files into one calendar (`lifecal build home.yml car.yml`)
 - [ ] Optional time of day for reminders
 - [ ] Publish to PyPI so `pipx install life-maintenance-calendar` works
 

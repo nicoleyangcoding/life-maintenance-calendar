@@ -2,6 +2,12 @@
 
 All notable changes are listed here. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.3.0] - 2026-11-19
+
+### Added
+- `build`, `upcoming` and `check` accept several task files and combine them, like `lifecal build home.yml car.yml`. Each file keeps its own reminder default, problems and warnings name the file they come from, and a task that appears in two files gets a warning.
+- `lifecal build --name` sets the calendar name. When combined files have different names, the calendar is called "Life maintenance" unless you pass `--name`.
+
 ## [0.2.1] - 2026-11-15
 
 ### Fixed

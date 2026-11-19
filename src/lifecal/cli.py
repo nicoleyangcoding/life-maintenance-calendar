@@ -23,8 +23,16 @@ def read_template(name: str) -> str:
     return (resources.files("lifecal") / "templates" / f"{name}.yml").read_text(encoding="utf-8")
 
 
-def _load(path: str) -> model.Calendar:
-    cal = model.load(path)
+def _load(paths: list[str], name: str | None = None) -> model.Calendar:
+    loaded, problems = [], []
+    for path in paths:
+        try:
+            loaded.append((path, model.load(path)))
+        except model.ConfigError as exc:
+            problems += exc.problems if len(paths) == 1 else [f"{path}: {p}" for p in exc.problems]
+    if problems:
+        raise model.ConfigError(problems)
+    cal = model.combine(loaded, name)
     for warning in cal.warnings:
         print(f"warning: {warning}", file=sys.stderr)
     return cal
@@ -49,8 +57,13 @@ def cmd_init(args: argparse.Namespace) -> int:
 
 
 def cmd_build(args: argparse.Namespace) -> int:
-    cal = _load(args.file)
-    out = Path(args.output) if args.output else Path(args.file).with_suffix(".ics")
+    cal = _load(args.files, args.name)
+    if args.output:
+        out = Path(args.output)
+    elif len(args.files) == 1:
+        out = Path(args.files[0]).with_suffix(".ics")
+    else:
+        out = Path(DEFAULT_FILE).with_suffix(".ics")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_bytes(ics.render(cal).encode("utf-8"))
     print(f"Wrote {len(cal.tasks)} task(s) to {out}")
@@ -58,7 +71,7 @@ def cmd_build(args: argparse.Namespace) -> int:
 
 
 def cmd_upcoming(args: argparse.Namespace) -> int:
-    cal = _load(args.file)
+    cal = _load(args.files)
     today = dt.date.today()
     rows = schedule.upcoming(cal.tasks, today, args.days)
     if args.format == "json":
@@ -85,9 +98,9 @@ def cmd_upcoming(args: argparse.Namespace) -> int:
 
 
 def cmd_check(args: argparse.Namespace) -> int:
-    cal = _load(args.file)
+    cal = _load(args.files)
     repeating = sum(task.repeats for task in cal.tasks)
-    print(f"{args.file} looks good: {len(cal.tasks)} task(s), {repeating} repeating.")
+    print(f"{', '.join(args.files)} looks good: {len(cal.tasks)} task(s), {repeating} repeating.")
     return 0
 
 
@@ -106,19 +119,38 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--force", action="store_true", help="overwrite an existing file")
     p.set_defaults(func=cmd_init)
 
-    p = sub.add_parser("build", help="write an .ics calendar file")
-    p.add_argument("file", nargs="?", default=DEFAULT_FILE)
+    p = sub.add_parser("build", help="write an .ics calendar file from one or more task files")
+    p.add_argument(
+        "files",
+        nargs="*",
+        default=[DEFAULT_FILE],
+        metavar="file",
+        help=f"task files (default: {DEFAULT_FILE})",
+    )
     p.add_argument("-o", "--output", help="where to write (default: same name, .ics)")
+    p.add_argument("--name", help="calendar name (default: the name set in the task files)")
     p.set_defaults(func=cmd_build)
 
     p = sub.add_parser("upcoming", help="list what is due soon")
-    p.add_argument("file", nargs="?", default=DEFAULT_FILE)
+    p.add_argument(
+        "files",
+        nargs="*",
+        default=[DEFAULT_FILE],
+        metavar="file",
+        help=f"task files (default: {DEFAULT_FILE})",
+    )
     p.add_argument("--days", type=int, default=90, help="how far ahead to look (default: 90)")
     p.add_argument("--format", choices=("text", "json"), default="text", help="output format (default: text)")
     p.set_defaults(func=cmd_upcoming)
 
     p = sub.add_parser("check", help="validate a task file")
-    p.add_argument("file", nargs="?", default=DEFAULT_FILE)
+    p.add_argument(
+        "files",
+        nargs="*",
+        default=[DEFAULT_FILE],
+        metavar="file",
+        help=f"task files (default: {DEFAULT_FILE})",
+    )
     p.set_defaults(func=cmd_check)
     return parser
 

@@ -77,11 +77,23 @@ Templates are general starting points, not professional advice. Where your manuf
 | -------------------------------- | ------------------------------------------------- |
 | `lifecal init [template]`        | Create `life.yml` from a template                 |
 | `lifecal build [file]`           | Write the `.ics` calendar file                    |
+| `lifecal build home.yml car.yml` | Combine several task files into one calendar      |
 | `lifecal upcoming [--days N]`    | List what's due in the next N days (default 90)   |
 | `lifecal upcoming --format json` | The same list as JSON, for scripts and dashboards |
 | `lifecal check [file]`           | Validate the file and explain any problems        |
 
-Every command reads `life.yml` in the current folder unless you pass another file.
+Every command reads `life.yml` in the current folder unless you pass other files.
+
+## Several task files
+
+Keep the house, the car and the pets in separate files, and still get one calendar:
+
+```bash
+lifecal build home.yml car.yml pets.yml --name "Household" -o household.ics
+lifecal upcoming home.yml car.yml
+```
+
+Each file keeps its own `remind` default. Without `-o`, a combined calendar is written to `life.ics`.
 
 ## Stay in sync with a calendar subscription
 

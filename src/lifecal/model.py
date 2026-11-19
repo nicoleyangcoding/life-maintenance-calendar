@@ -23,6 +23,7 @@ _AMOUNT = re.compile(r"^\s*(\d+)\s*(day|week|month|year)s?\s*(before)?\s*$", re.
 _DAYS_PER_UNIT = {"day": 1, "week": 7, "month": 30, "year": 365}
 
 DEFAULT_REMIND_DAYS = 7
+DEFAULT_NAME = "Life maintenance"
 
 
 class ConfigError(Exception):
@@ -201,5 +202,23 @@ def parse(data: Any, source: str = "life.yml", today: dt.date | None = None) -> 
     if problems:
         raise ConfigError(problems)
 
-    name = str(settings.get("name") or "Life maintenance").strip()
+    name = str(settings.get("name") or DEFAULT_NAME).strip()
     return Calendar(name, tuple(tasks), tuple(warnings))
+
+
+def combine(calendars: list[tuple[str, Calendar]], name: str | None = None) -> Calendar:
+    """Merge (source, calendar) pairs into one calendar, warning about tasks found in two files."""
+    names = {cal.name for _, cal in calendars}
+    title = name or (names.pop() if len(names) == 1 else DEFAULT_NAME)
+    tasks: list[Task] = []
+    warnings: list[str] = []
+    first_seen: dict[str, str] = {}
+    for source, cal in calendars:
+        warnings += [f"{source}: {w}" for w in cal.warnings] if len(calendars) > 1 else cal.warnings
+        for task in cal.tasks:
+            key = task.name.lower()
+            other = first_seen.setdefault(key, source)
+            if other != source:
+                warnings.append(f"{source}: '{task.name}' is also in {other}")
+        tasks += cal.tasks
+    return Calendar(title, tuple(tasks), tuple(warnings))
